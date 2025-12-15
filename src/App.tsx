@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Upload, RefreshCw, FileText, TrendingUp, Users, Award } from 'lucide-react';
+import { Upload, Trash2, FileText, TrendingUp, Users, Award } from 'lucide-react';
 import StatsCard from './components/StatsCard';
 import Top3Card from './components/Top3Card';
 import ChartsSection from './components/ChartsSection';
@@ -12,6 +12,23 @@ function App() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [lastCSV, setLastCSV] = useState<string | null>(null);
   const [status, setStatus] = useState('Aguardando arquivo...');
+
+  useEffect(() => {
+    const savedCSV = localStorage.getItem('dashboard_csv_data');
+    if (savedCSV) {
+      try {
+        setLastCSV(savedCSV);
+        const parsed = parseCSV(savedCSV);
+        setData(parsed);
+        setStats(calculateStats(parsed));
+        setStatus(`Dashboard carregado a partir de dados salvos — ${parsed.length} registros`);
+      } catch (error) {
+        console.error('Erro ao processar CSV salvo:', error);
+        setStatus('Erro ao carregar dados salvos');
+        localStorage.removeItem('dashboard_csv_data');
+      }
+    }
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -27,6 +44,7 @@ function App() {
       try {
         const text = e.target?.result as string;
         setLastCSV(text);
+        localStorage.setItem('dashboard_csv_data', text);
         const parsed = parseCSV(text);
         setData(parsed);
         setStats(calculateStats(parsed));
@@ -42,15 +60,12 @@ function App() {
     event.target.value = '';
   };
 
-  const handleReload = () => {
-    if (!lastCSV) {
-      setStatus('Nenhum CSV carregado ainda');
-      return;
-    }
-    const parsed = parseCSV(lastCSV);
-    setData(parsed);
-    setStats(calculateStats(parsed));
-    setStatus(`Recarregado — ${parsed.length} registros`);
+  const handleClear = () => {
+    localStorage.removeItem('dashboard_csv_data');
+    setData([]);
+    setStats(null);
+    setLastCSV(null);
+    setStatus('Dashboard limpo. Aguardando novo arquivo...');
   };
 
   return (
@@ -75,11 +90,12 @@ function App() {
               />
             </label>
             <button
-              onClick={handleReload}
-              className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg"
+              onClick={handleClear}
+              className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg disabled:bg-slate-300 disabled:cursor-not-allowed"
+              disabled={!stats}
             >
-              <RefreshCw size={18} />
-              Recarregar
+              <Trash2 size={18} />
+              Limpar
             </button>
             <div className="flex items-center gap-2 text-slate-600 text-sm">
               <FileText size={18} />

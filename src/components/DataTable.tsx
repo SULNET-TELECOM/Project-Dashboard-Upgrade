@@ -83,12 +83,12 @@ export default function DataTable({ data }: DataTableProps) {
       <div className="overflow-x-auto">
         <table className="w-full table-fixed">
           <colgroup>
-            <col style={{ width: '12%' }} />
+            <col style={{ width: '13%' }} />
+            <col style={{ width: '19%' }} />
             <col style={{ width: '18%' }} />
             <col style={{ width: '18%' }} />
-            <col style={{ width: '12%' }} />
-            <col style={{ width: '28%' }} />
-            <col style={{ width: '12%' }} />
+            <col style={{ width: '24%' }} />
+            <col style={{ width: '8%' }} />
           </colgroup>
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
@@ -103,7 +103,7 @@ export default function DataTable({ data }: DataTableProps) {
                 <th
                   key={field}
                   onClick={() => handleSort(field)}
-                  className="px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors overflow-hidden"
+                  className="px-2 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors overflow-hidden"
                 >
                   <div className="flex items-center gap-2 truncate">
                     {label}
@@ -116,12 +116,12 @@ export default function DataTable({ data }: DataTableProps) {
           <tbody className="divide-y divide-slate-100">
             {paginatedData.map((record, index) => (
               <tr key={index} className="hover:bg-slate-50 transition-colors">
-                <td className="px-4 py-4 text-sm text-slate-700 truncate" title={record.periodo}>{record.periodo}</td>
-                <td className="px-4 py-4 text-sm text-slate-700 font-medium truncate" title={record.cliente}>{record.cliente}</td>
-                <td className="px-4 py-4 text-sm text-slate-700 truncate" title={record.vendedor}>{record.vendedor}</td>
-                <td className="px-4 py-4 text-sm text-slate-700 truncate" title={record.processo}>{record.processo}</td>
-                <td className="px-4 py-4 text-sm text-slate-700 truncate" title={record.plano}>{record.plano}</td>
-                <td className="px-4 py-4 text-sm font-semibold text-emerald-600 truncate">
+                <td className="px-3 py-4 text-xs text-slate-700 font-semibold truncate" title={record.periodo}>{record.periodo}</td>
+                <td className="px-2 py-4 text-xs text-slate-700 font-semibold truncate" title={record.cliente}>{record.cliente}</td>
+                <td className="px-2 py-4 text-xs text-slate-700 truncate" title={record.vendedor}>{record.vendedor}</td>
+                <td className="px-2 py-4 text-xs text-slate-700 truncate" title={record.processo}>{record.processo}</td>
+                <td className="px-2 py-4 text-xs text-slate-700 font-semibold truncate" title={record.plano}>{record.plano}</td>
+                <td className="px-2 py-4 text-xs font-semibold text-emerald-600 truncate">
                   {record.diff.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                 </td>
               </tr>
